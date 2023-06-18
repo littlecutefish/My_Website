@@ -1,0 +1,45 @@
+
+.box {
+	border-radius: 10px;
+	width: 300px;
+	overflow: hidden;
+	margin: 15px;
+    background-color: white;
+    box-shadow: rgb(163, 160, 160) 2px 2px 10px 2px;
+	
+	.top {
+		width: 300px;
+		overflow: hidden;
+		margin: 0 auto;
+		height: 200px;
+        border-bottom: 2px solid black;
+	}
+	.bottom {
+		height: 120px;
+		padding: 5px 5px;
+		width: 100%;
+        text-align: center;
+		margin: 0 auto;
+		.bottom-item:nth-child(1) {
+			transition-delay: .1s;
+		}
+		.bottom-item:nth-child(2) {
+			transition-delay: .15s;
+		}
+		.bottom-item {
+			transition: .2s ease-in-out all;
+			height: auto;
+			padding: 1px;
+			color: rgb(0, 0, 0);
+			margin: 0 5px 0 0;
+			font-size: 12px;
+			opacity: 0;
+			transform: translateY(-20px);
+		}
+	}
+}
+.box:hover .bottom-item {
+	transition: .3s ease-in-out all;
+	opacity: 1;
+	transform: translateY(0px);
+}
