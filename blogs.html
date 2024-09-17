@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Blogs</title>
+    <link rel="stylesheet" href="css/blogs.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<header id="header">
+    <div class="small" id="header-scroll">
+        <div class="nav-right visible-xs">
+            <div class="button" id="btn">
+                <div class="bar top"></div>
+                <div class="bar middle"></div>
+                <div class="bar bottom"></div>
+            </div>
+        </div>
+        <h1><a href="index.html">♡Jolie</a></h1>
+        <nav>
+            <!-- <ul>
+                <li><a href="#Home">Home</a></li>
+                <li><a href="#About">About</a></li>
+                <li><a href="#Skill">Skill</a></li>
+                <li><a href="#Project">Project</a></li>
+                <li><a href="#Contact">Contact</a></li>
+            </ul> -->
+            <div class="nav-right hidden-xs">
+                <div class="button" id="btn">
+                    <div class="bar top"></div>
+                    <div class="bar middle"></div>
+                    <div class="bar bottom"></div>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+<div class="sidebar">
+    <ul class="sidebar-list">
+        <li class="sidebar-item"><a href="blogs.html" class="sidebar-anchor">Blogs</a></li>
+        <li class="sidebar-item"><a href="#" class="sidebar-anchor">Add Blog</a></li>
+        <li class="sidebar-item"><a href="#" class="sidebar-anchor">Item 3</a></li>
+        <li class="sidebar-item"><a href="#" class="sidebar-anchor">Item 4</a></li>
+    </ul>
+</div>
+
+<div class="blog-container">
+    <h1>My Blogs</h1>
+
+    <!-- Form to add new blog -->
+    <div class="blog-form">
+        <h2>Add a new blog</h2>
+        <input type="text" id="blogTitle" placeholder="Blog Title">
+        <textarea id="blogContent" rows="5" placeholder="Blog Content"></textarea>
+        <button id="addBlogBtn">Add Blog</button>
+    </div>
+
+    <!-- Display added blogs -->
+    <div class="blog-list" id="blogList"></div>
+</div>
+
+<script type="module">
+    // Import Firebase SDKs
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+    // Your Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDnZY4cAYD8rE_-h1e2AywOputSP_FOuCA",
+      authDomain: "my-website-39019.firebaseapp.com",
+      projectId: "my-website-39019",
+      storageBucket: "my-website-39019.appspot.com",
+      messagingSenderId: "406141069241",
+      appId: "1:406141069241:web:6047eb596ab231a9ed7868",
+      measurementId: "G-Y6RLF1063H"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Function to add blog to Firestore
+    async function addBlogToFirestore(title, content) {
+      try {
+        const docRef = await addDoc(collection(db, "blogs"), {
+          title: title,
+          content: content,
+          timestamp: new Date() // Optional: To store the timestamp
+        });
+        console.log("Blog added successfully with ID: ", docRef.id);
+        fetchBlogs(); // Refresh the blog list after adding
+      } catch (e) {
+        console.error("Error adding blog: ", e);
+      }
+    }
+
+    // Function to fetch blogs from Firestore
+    async function fetchBlogs() {
+      const querySnapshot = await getDocs(collection(db, "blogs"));
+      const blogList = document.getElementById('blogList');
+      blogList.innerHTML = '';  // Clear the blog list before rendering
+      querySnapshot.forEach((doc) => {
+        const blogData = doc.data();
+        const blogPost = document.createElement('div');
+        blogPost.classList.add('blog-post');
+        blogPost.innerHTML = `
+          <h3>${blogData.title}</h3>
+          <p>${blogData.content}</p>
+          <p><small>${blogData.timestamp ? new Date(blogData.timestamp.seconds * 1000).toLocaleString() : ''}</small></p>
+          <button class="delete-btn" onclick="deleteBlog('${doc.id}')">Delete</button>
+        `;
+        blogList.appendChild(blogPost);
+      });
+    }
+
+    // Function to delete a blog from Firestore
+    async function deleteBlog(id) {
+      try {
+        await deleteDoc(doc(db, "blogs", id));
+        console.log("Blog deleted with ID: ", id);
+        fetchBlogs(); // Refresh the blog list after deletion
+      } catch (e) {
+        console.error("Error deleting blog: ", e);
+      }
+    }
+
+    // Make deleteBlog available globally
+    window.deleteBlog = deleteBlog;
+
+    // Function to add blog from form input
+    function addBlog() {
+        const title = document.getElementById('blogTitle').value;
+        const content = document.getElementById('blogContent').value;
+
+        // Make sure both fields are filled out
+        if (title && content) {
+            addBlogToFirestore(title, content);
+
+            // Clear the input fields after adding
+            document.getElementById('blogTitle').value = '';
+            document.getElementById('blogContent').value = '';
+        } else {
+            alert('Please fill in both the title and content fields.');
+        }
+    }
+
+    // Add event listener to the button
+    document.getElementById('addBlogBtn').addEventListener('click', addBlog);
+
+    // Call fetchBlogs on page load to display existing blogs
+    window.onload = fetchBlogs;
+
+</script>
+
+<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script src="js/index.js"></script>
+
+</body>
+</html>

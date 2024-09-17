@@ -1,0 +1,33 @@
+/* body {
+    font-family: Sora;
+} */
+.blog-container {
+    margin: 20px;
+}
+.blog-form {
+    margin-bottom: 20px;
+}
+.blog-form input, .blog-form textarea {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+}
+.blog-form button {
+    padding: 10px 20px;
+}
+.blog-list {
+    margin-top: 20px;
+}
+.blog-post {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+.delete-btn {
+    background-color: #ff4b5c;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
