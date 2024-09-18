@@ -1,18 +1,3 @@
-
-//in case js in turned off
-// $(window).on('load', function () {
-//     $("#header-scroll").removeClass("small")
-// });
-
-// $(window).scroll(function () {
-//      var sc = $(window).scrollTop()
-//     if (sc > 1) {
-//         $("#header-scroll").addClass("small")
-//     } else {
-//         $("#header-scroll").removeClass("small")
-//     }
-// });
-
 //scrollspy
 $(window).on('scroll', function () {
    var sections = $('section')
